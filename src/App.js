@@ -47,7 +47,7 @@ const TodoApp = () => {
     }, [products])
 
     return (
-        <div className="h-100 min-vh-100" style={{ backgroundColor: "#eee" }}>
+        <div className="h-100 min-vh-100 pb-4" style={{ backgroundColor: "#eee" }}>
             <div className="container-xxl">
                 <div className="row d-flex flex-row justify-content-between pb-6 px-20">
                     <h1 className="text-center">Products</h1>

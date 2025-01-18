@@ -20,7 +20,7 @@ const Table = ({ products, handleDeleteProduct, handleAddProduct, handleUpdatePr
                             <div className="px-4">
                                 <ModalComponent category={category} onSubmit={handleAddProduct} />
                                 <h4 className="text-center my-3 pb-3 text-uppercase bold">{category}</h4>
-                                {products.length === 0 ? <h5>No products</h5> :
+                                {products.length === 0 ? <h5 className="mb-4">No products</h5> :
                                     <table className="table mb-4">
                                         <thead>
                                             <tr>
