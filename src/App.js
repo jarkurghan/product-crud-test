@@ -1,40 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "./components/Table";
+import { getProducts, saveProducts } from "./utils/localStorageHelper";
 
 const TodoApp = () => {
-    const [tasks, setTasks] = useState([
-        { id: 1, title: "Buy groceries for next week", status: "In progress", description: "In progress" },
-        { id: 2, title: "Renew car insurance", status: "In progress", description: "In progress" },
-        { id: 3, title: "Sign up for online course", status: "In progress", description: "In progress" },
-    ]);
+    const [products, setProducts] = useState(getProducts());
 
-    const [newTask, setNewTask] = useState("");
+    const handleAddProduct = (product) => {
+        let maxID = 1;
+        products.mans.forEach(pro => {
+            if (pro.id >= maxID) maxID = pro.id + 1;
+        });
+        products.womans.forEach(pro => {
+            if (pro.id >= maxID) maxID = pro.id + 1;
+        });
+        products.kids.forEach(pro => {
+            if (pro.id >= maxID) maxID = pro.id + 1;
+        });
 
-    const handleAddTask = (e) => {
-        e.preventDefault();
-        if (newTask.trim() === "") return;
-        const newTaskObj = {
-            id: tasks.length + 1,
-            title: newTask,
-            status: "In progress",
-        };
-        setTasks([...tasks, newTaskObj]);
-        setNewTask("");
+        product.id = maxID;
+        products[product.category].push(product);
+
+        console.log(products);
+        setProducts({ ...products });
     };
 
-    const handleDeleteTask = (id) => {
-        setTasks(tasks.filter((task) => task.id !== id));
+
+    const handleUpdateProduct = (product) => {
+        const elem = products[product.category].find(e => e.id === product.id);
+        elem.title = product.title;
+        elem.price = product.price;
+        elem.description = product.description;
+        setProducts(products);
+    }
+
+
+    const handleDeleteProduct = (id) => {
+        setProducts({
+            mans: products.mans.filter((product) => product.id !== id),
+            kids: products.kids.filter((product) => product.id !== id),
+            womans: products.womans.filter((product) => product.id !== id),
+        });
     };
+
+    useEffect(() => {
+        saveProducts(products)
+    }, [products])
 
     return (
         <div className="h-100 min-vh-100" style={{ backgroundColor: "#eee" }}>
-            <div className="container-xxl ">
+            <div className="container-xxl">
                 <div className="row d-flex flex-row justify-content-between pb-6 px-20">
-                    <h1 className="text-center ">Products</h1>
+                    <h1 className="text-center">Products</h1>
                 </div>
             </div>
 
-            <Table tasks={tasks} handleDeleteTask={handleDeleteTask} handleAddTask={handleAddTask} />
+            <div className="d-flex gap-5 flex-column mb-6" >
+                <Table products={products.kids} category="kids" handleDeleteProduct={handleDeleteProduct} handleUpdateProduct={handleUpdateProduct} handleAddProduct={handleAddProduct} />
+                <Table products={products.mans} category="mans" handleDeleteProduct={handleDeleteProduct} handleUpdateProduct={handleUpdateProduct} handleAddProduct={handleAddProduct} />
+                <Table products={products.womans} category="womans" handleDeleteProduct={handleDeleteProduct} handleUpdateProduct={handleUpdateProduct} handleAddProduct={handleAddProduct} />
+            </div>
         </div>
     );
 };
